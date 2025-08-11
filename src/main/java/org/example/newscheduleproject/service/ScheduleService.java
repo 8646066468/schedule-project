@@ -4,7 +4,7 @@ package org.example.newscheduleproject.service;
 import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.dto.Request.ScheduleRequest;
 import org.example.newscheduleproject.dto.Response.ScheduleResponse;
-import org.example.newscheduleproject.dto.Response.UserResponse;
+
 import org.example.newscheduleproject.entity.Schedule;
 import org.example.newscheduleproject.entity.User;
 import org.example.newscheduleproject.repository.ScheduleRepository;
@@ -63,6 +63,7 @@ public class ScheduleService {
         if (!schedule.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("사용자와 스케줄이 일치하지 않습니다.");
         }
+
 
         schedule.update(scheduleRequest.getTitle(),scheduleRequest.getContent());
         scheduleRepository.save(schedule);

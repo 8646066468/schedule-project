@@ -46,7 +46,8 @@ public class UserController {
     // 삭제
     @DeleteMapping("/{userId}")
     public void  deleteSchedule(
-            @PathVariable Long userId
+            @PathVariable Long userId,
+            @RequestBody UserRequest userRequest
     ) {
         userService.deleteUserById(userId);
 
