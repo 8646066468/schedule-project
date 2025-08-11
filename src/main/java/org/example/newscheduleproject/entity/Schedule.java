@@ -1,9 +1,6 @@
 package org.example.newscheduleproject.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +14,9 @@ public class Schedule extends BaseEntity {
     private String name;
     private String title;
     private String content;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Schedule(String name, String title, String content) {
         this.name = name;

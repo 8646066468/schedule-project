@@ -39,7 +39,7 @@ public class ScheduleService {
         );
 
         schedule.updatesc(scheduleRequest.getContent(),scheduleRequest.getName(),scheduleRequest.getTitle());
-        scheduleRepository.saveAndFlush(schedule);
+        scheduleRepository.save(schedule);
         return ScheduleResponse.from(schedule);
     }
 
