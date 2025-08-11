@@ -60,9 +60,25 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new IllegalArgumentException("그런 id 없어요")
         );
+        if (!schedule.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("사용자와 스케줄이 일치하지 않습니다.");
+        }
 
-        schedule.getupdate(scheduleRequest.getTitle(),scheduleRequest.getContent());
+        schedule.update(scheduleRequest.getTitle(),scheduleRequest.getContent());
         scheduleRepository.save(schedule);
         return ScheduleResponse.from(schedule);
+    }
+
+    public void deleteSchedule(Long userId, Long scheduleId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("그런 id 없어요")
+        );
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new IllegalArgumentException("그런 id 없어요")
+        );
+        if (!schedule.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("사용자와 스케줄이 일치하지 않습니다.");
+        }
+        scheduleRepository.delete(schedule);
     }
 }
