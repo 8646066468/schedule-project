@@ -3,7 +3,7 @@ package org.example.newscheduleproject.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.newscheduleproject.dto.Request.ScheduleRequest;
+
 
 @Entity
 @NoArgsConstructor
