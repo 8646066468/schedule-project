@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ScheduleResponse {
     private final Long id;
-    private final String name;
+
     private final String title;
     private final String content;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
     public static ScheduleResponse from(Schedule schedule) {
-        return new ScheduleResponse(schedule.getId(), schedule.getName(), schedule.getTitle(), schedule.getContent(), schedule.getCreatedAt(), schedule.getModifiedAt());
+        return new ScheduleResponse(schedule.getId(), schedule.getTitle(), schedule.getContent(), schedule.getCreatedAt(), schedule.getModifiedAt());
     }
 }
