@@ -8,7 +8,7 @@ import java.io.IOException;
 
 @Slf4j
 public class LoginFilter implements Filter {
-    private static final String[] WHITE_LIST = {"/", "/user/signup", "/login", "/logout"};
+    private static final String[] WHITE_LIST = {"/", "/signup", "/login", "/logout"};
     @Override
     public void doFilter(
             ServletRequest request,
@@ -23,7 +23,7 @@ public class LoginFilter implements Filter {
         if (!isWhiteList(requestURI)) {
             HttpSession session = httpRequest.getSession(false);
             // 로그인하지 않은 사용자인 경우
-            if (session == null || session.getAttribute("sessionKey값") == null) {
+            if (session == null || session.getAttribute("LOGIN_DIRECTOR") == null) {
                 throw new RuntimeException("로그인 해주세요.");
             }
         }

@@ -4,7 +4,6 @@ package org.example.newscheduleproject.service;
 import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.dto.Request.ScheduleRequest;
 import org.example.newscheduleproject.dto.Response.ScheduleResponse;
-
 import org.example.newscheduleproject.entity.Schedule;
 import org.example.newscheduleproject.entity.User;
 import org.example.newscheduleproject.repository.ScheduleRepository;
@@ -12,7 +11,6 @@ import org.example.newscheduleproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

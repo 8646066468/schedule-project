@@ -18,14 +18,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponse> saveSchedule(
-            @RequestBody UserRequest userRequest
-    ) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(userService.saveUser(userRequest));
-    }
 
     // 전체 조회
     @GetMapping
@@ -49,7 +41,7 @@ public class UserController {
             @PathVariable Long userId,
             @RequestBody UserRequest userRequest
     ) {
-        userService.deleteUserById(userId);
+        userService.deleteUserById(userId, userRequest);
 
     }
 

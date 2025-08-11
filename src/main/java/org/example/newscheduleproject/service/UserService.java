@@ -16,14 +16,6 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-
-    @Transactional
-    public UserResponse saveUser(UserRequest userRequest) {
-        User user = new User(userRequest.getName(), userRequest.getEmail(),userRequest.getPassword());
-        userRepository.save(user);
-
-        return UserResponse.from(user);
-    }
     @Transactional
     public List<UserResponse> getUser() {
         List<User> users = userRepository.findAll();
