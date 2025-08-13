@@ -21,7 +21,6 @@ public class AuthService {
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
 
-
         User user = new User(request.getName(),request.getEmail(), request.getPassword());
         userRepository.save(user);
         return new AuthResponse(user.getId());
@@ -36,8 +35,6 @@ public class AuthService {
         if (!user.getPassword().equals(authRequest.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-        //글로벌 입셉션 GlobalExceptionHandler
-        //커스텀 예외처리
 
         return new AuthResponse(user.getId());
 

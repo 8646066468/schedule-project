@@ -27,27 +27,32 @@ public class UserService {
         return userResponseList;
     }
     @Transactional
-    public UserResponse Update(final Long userId,final UserRequest userRequest) {
+    public UserResponse Update(final Long userId, final UserRequest userRequest) {
+
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("그런 사용자는 없는습니다")
         );
         String Password = userRequest.getPassword();
+
         if (!user.checkPassword(Password)) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
+
         user.update(userRequest.getName(),userRequest.getEmail());
         userRepository.save(user);
         return UserResponse.from(user);
 
     }
+
     //삭제
     @Transactional
-    public void deleteUserById(final Long userId,final UserDeleteSchedule userDeleteScheduleRequest) {
+    public void deleteUserById(final Long userId,final UserDeleteSchedule userDeleteRequest) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("그런 아이디 없습니다.")
         );
-        if (!userDeleteScheduleRequest.getPassword().equals(user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
+        String Password = userDeleteRequest.getPassword();
+        if (!user.checkPassword(Password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         userRepository.delete(user);
     }
