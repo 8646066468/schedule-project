@@ -35,7 +35,6 @@ public class AuthController {
             AuthResponse result = authService.login(authloginRequest);
             HttpSession session = request.getSession();
             session.setAttribute("LOGIN_DIRECTOR", result.getId());
-            authService.login(authloginRequest);
             return ResponseEntity.ok(result);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

@@ -29,12 +29,12 @@ public class UserService {
     @Transactional
     public UserResponse Update(final Long userId,final UserRequest userRequest) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("그런 일정이 없는데?")
+                () -> new IllegalArgumentException("그런 사용자는 없는습니다")
         );
-        if (!userRequest.getPassword().equals(user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않다");
-        }// t  userentity에 비밀번호 알고리즘을 넣어보자
-
+        String Password = userRequest.getPassword();
+        if (!user.checkPassword(Password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
         user.update(userRequest.getName(),userRequest.getEmail());
         userRepository.save(user);
         return UserResponse.from(user);
@@ -44,10 +44,10 @@ public class UserService {
     @Transactional
     public void deleteUserById(final Long userId,final UserDeleteSchedule userDeleteScheduleRequest) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("그런 아이디 없는데요?")
+                () -> new IllegalArgumentException("그런 아이디 없습니다.")
         );
         if (!userDeleteScheduleRequest.getPassword().equals(user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않다");
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
         }
         userRepository.delete(user);
     }

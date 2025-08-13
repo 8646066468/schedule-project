@@ -32,4 +32,8 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
+    }
+
 }
