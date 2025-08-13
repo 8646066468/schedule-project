@@ -1,12 +1,7 @@
 package org.example.newscheduleproject.controller;
-
-
-
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.newscheduleproject.dto.Request.UserDeleteSchedule;
 import org.example.newscheduleproject.dto.Request.UserRequest;
 import org.example.newscheduleproject.dto.Response.UserResponse;
 import org.example.newscheduleproject.service.UserService;
@@ -29,7 +24,7 @@ public class UserController {
     }
 
     // 수정
-    @PutMapping("/{userId}")
+    @PutMapping
     public ResponseEntity<UserResponse> updateSchedule(
             HttpSession session,
             @RequestBody @Valid UserRequest userRequest
@@ -39,12 +34,12 @@ public class UserController {
     }
 
     // 삭제
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     public void  deleteSchedule(
-            HttpSession session,
-            @RequestBody @Valid UserDeleteSchedule userDeleteScheduleRequest
+            HttpSession session
+
     ) {
-        userService.deleteUserById(session, userDeleteScheduleRequest);
+        userService.deleteUserById(session);
 
     }
 

@@ -3,7 +3,7 @@ package org.example.newscheduleproject.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+
 
 @Entity
 @Getter
@@ -15,7 +15,11 @@ public class Comment extends BaseEntity{
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shedule_id")
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
+    public Comment(String content, Schedule schedule) {
+        this.content = content;
+        this.schedule = schedule;
+    }
 }

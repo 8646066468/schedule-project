@@ -8,7 +8,6 @@ import org.example.newscheduleproject.auth.dto.AuthLoginRequest;
 import org.example.newscheduleproject.auth.dto.AuthRequest;
 import org.example.newscheduleproject.auth.dto.AuthResponse;
 import org.example.newscheduleproject.auth.service.AuthService;
-import org.example.newscheduleproject.common.filter.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

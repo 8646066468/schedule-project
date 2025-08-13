@@ -37,7 +37,6 @@ public class ScheduleController {
 
     @PutMapping("/{scheduleId}")
     public ScheduleResponse updateSchedule(
-            @PathVariable Long userId,
             @PathVariable Long scheduleId,
             @RequestBody ScheduleRequest request,
             HttpSession session
@@ -47,7 +46,6 @@ public class ScheduleController {
 
     @DeleteMapping("/{scheduleId}")
     public void deleteSchedule(
-            @PathVariable Long userId,
             @PathVariable Long scheduleId,
             HttpSession session
     ) {

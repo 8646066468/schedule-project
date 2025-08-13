@@ -2,7 +2,6 @@ package org.example.newscheduleproject.dto.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.newscheduleproject.entity.Schedule;
 import org.example.newscheduleproject.entity.User;
 
 import java.time.LocalDateTime;
