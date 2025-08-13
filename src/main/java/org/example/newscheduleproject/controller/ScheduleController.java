@@ -1,6 +1,7 @@
 package org.example.newscheduleproject.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.dto.Request.ScheduleRequest;
 import org.example.newscheduleproject.dto.Response.ScheduleResponse;
@@ -22,7 +23,7 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponse> save(
             @PathVariable Long userId,
-            @RequestBody ScheduleRequest scheduleRequest
+            @RequestBody @Valid ScheduleRequest scheduleRequest
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveSchedule(scheduleRequest,userId));
     }
@@ -50,7 +51,7 @@ public class ScheduleController {
             @PathVariable Long scheduleId
     ) {
         scheduleService.deleteSchedule(userId,scheduleId);
-        return ResponseEntity.ok().build();  // 200 OK, 바디 없음
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 

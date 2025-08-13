@@ -1,6 +1,7 @@
 package org.example.newscheduleproject.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.newscheduleproject.dto.Request.UserDeleteSchedule;
 import org.example.newscheduleproject.dto.Request.UserRequest;
 import org.example.newscheduleproject.dto.Response.UserResponse;
 import org.example.newscheduleproject.entity.User;
@@ -41,11 +42,11 @@ public class UserService {
     }
     //삭제
     @Transactional
-    public void deleteUserById(Long userId,UserRequest userRequest) {
+    public void deleteUserById(Long userId, UserDeleteSchedule userDeleteScheduleRequest) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("그런 아이디 없는데요?")
         );
-        if (!userRequest.getPassword().equals(user.getPassword())) {
+        if (!userDeleteScheduleRequest.getPassword().equals(user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않다");
         }
         userRepository.delete(user);

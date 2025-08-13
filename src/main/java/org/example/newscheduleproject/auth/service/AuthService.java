@@ -35,6 +35,9 @@ public class AuthService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
+        //글로벌 입셉션 GlobalExceptionHandler
+        //커스텀 예외처리
+
         return new AuthResponse(user.getId());
 
     }

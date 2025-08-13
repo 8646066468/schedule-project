@@ -2,7 +2,9 @@ package org.example.newscheduleproject.controller;
 
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.newscheduleproject.dto.Request.UserDeleteSchedule;
 import org.example.newscheduleproject.dto.Request.UserRequest;
 import org.example.newscheduleproject.dto.Response.UserResponse;
 import org.example.newscheduleproject.service.UserService;
@@ -28,7 +30,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponse> updateSchedule(
             @PathVariable Long userId,
-            @RequestBody UserRequest userRequest
+            @RequestBody @Valid UserRequest userRequest
     ) {
         return ResponseEntity
                 .ok(userService.Uqdate(userId, userRequest));
@@ -38,9 +40,9 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void  deleteSchedule(
             @PathVariable Long userId,
-            @RequestBody UserRequest userRequest
+            @RequestBody @Valid UserDeleteSchedule userDeleteScheduleRequest
     ) {
-        userService.deleteUserById(userId, userRequest);
+        userService.deleteUserById(userId, userDeleteScheduleRequest);
 
     }
 
