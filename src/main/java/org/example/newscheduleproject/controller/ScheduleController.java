@@ -23,8 +23,8 @@ public class ScheduleController {
             @RequestBody ScheduleRequest request,
             HttpSession session
     ) {
-        // 세션 사용자 vs URL userId 검증은 서비스에서 처리
-        return scheduleService.saveSchedule(session, request);
+
+        return scheduleService.saveSchedule(session, userId, request);
     }
 
     @GetMapping

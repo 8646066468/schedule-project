@@ -34,9 +34,11 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponse saveSchedule(HttpSession session, ScheduleRequest request) {
+    public ScheduleResponse saveSchedule(HttpSession session,Long userId, ScheduleRequest request) {
         User loginUser = getLoginUser(session);
-
+        if (!loginUser.getId().equals(userId)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), loginUser);
         scheduleRepository.save(schedule);
         return ScheduleResponse.from(schedule);
