@@ -1,11 +1,14 @@
 package org.example.newscheduleproject.service;
 
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.dto.Request.ScheduleRequest;
 import org.example.newscheduleproject.dto.Response.ScheduleResponse;
 import org.example.newscheduleproject.entity.Schedule;
 import org.example.newscheduleproject.entity.User;
+import org.example.newscheduleproject.error.CustomException;
+import org.example.newscheduleproject.error.ErrorCode;
 import org.example.newscheduleproject.repository.ScheduleRepository;
 import org.example.newscheduleproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -20,64 +23,63 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
 
+    // 로그인 사용자 조회 공통 메서드
+    private User getLoginUser(HttpSession session) {
+        Long loginUserId = (Long) session.getAttribute("LOGIN_DIRECTOR");
+        if (loginUserId == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+        return userRepository.findById(loginUserId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 
-    //생성
     @Transactional
-    public ScheduleResponse saveSchedule(final ScheduleRequest scheduleRequest, final Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("그런 id 없어요")
-        );
-        Schedule schedule = new Schedule(
-                scheduleRequest.getTitle(),
-                scheduleRequest.getContent(),
-                user
-        );
+    public ScheduleResponse saveSchedule(HttpSession session, ScheduleRequest request) {
+        User loginUser = getLoginUser(session);
+
+        Schedule schedule = new Schedule(request.getTitle(), request.getContent(), loginUser);
         scheduleRepository.save(schedule);
         return ScheduleResponse.from(schedule);
-
     }
-    //전체조회
-    @Transactional
-    public List<ScheduleResponse> getFindAll(final Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("그런 id 없어요")
-        );
-        //특정 사용자 스케줄 조회
-        List<Schedule> schedules = scheduleRepository.findByUser(user);;
 
+    @Transactional
+    public List<ScheduleResponse> getSchedules(HttpSession session, Long userId) {
+        User loginUser = getLoginUser(session);
+
+        if (!loginUser.getId().equals(userId)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        List<Schedule> schedules = scheduleRepository.findByUserId(userId);
         return schedules.stream().map(ScheduleResponse::from).collect(Collectors.toList());
-
     }
 
-    //수정
     @Transactional
-    public ScheduleResponse updateSchedule(final Long userId,final Long scheduleId,final ScheduleRequest scheduleRequest) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("그런 id 없어요")
-        );
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalArgumentException("그런 id 없어요")
-        );
-        if (!schedule.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("사용자와 스케줄이 일치하지 않습니다.");
+    public ScheduleResponse updateSchedule(HttpSession session, Long scheduleId, ScheduleRequest request) {
+        User loginUser = getLoginUser(session);
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        if (!schedule.getUser().getId().equals(loginUser.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
-
-        schedule.update(scheduleRequest.getTitle(),scheduleRequest.getContent());
-        scheduleRepository.save(schedule);
+        schedule.update(request.getTitle(), request.getContent());
         return ScheduleResponse.from(schedule);
     }
 
-    public void deleteSchedule(final Long userId,final Long scheduleId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("그런 id 없어요")
-        );
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalArgumentException("그런 id 없어요")
-        );
-        if (!schedule.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("사용자와 스케줄이 일치하지 않습니다.");
+    @Transactional
+    public void deleteSchedule(HttpSession session, Long scheduleId) {
+        User loginUser = getLoginUser(session);
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        if (!schedule.getUser().getId().equals(loginUser.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
+
         scheduleRepository.delete(schedule);
     }
 }

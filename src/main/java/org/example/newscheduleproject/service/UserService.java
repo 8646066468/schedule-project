@@ -1,10 +1,13 @@
 package org.example.newscheduleproject.service;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.dto.Request.UserDeleteSchedule;
 import org.example.newscheduleproject.dto.Request.UserRequest;
 import org.example.newscheduleproject.dto.Response.UserResponse;
 import org.example.newscheduleproject.entity.User;
+import org.example.newscheduleproject.error.CustomException;
+import org.example.newscheduleproject.error.ErrorCode;
 import org.example.newscheduleproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,33 +30,26 @@ public class UserService {
         return userResponseList;
     }
     @Transactional
-    public UserResponse Update(final Long userId, final UserRequest userRequest) {
+    public UserResponse Update(HttpSession session, final UserRequest userRequest) {
+        Long loginUserId  = (Long) session.getAttribute("LOGIN_DIRECTOR");
 
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("그런 사용자는 없는습니다")
+        User user = userRepository.findById(loginUserId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        String Password = userRequest.getPassword();
-
-        if (!user.checkPassword(Password)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
 
         user.update(userRequest.getName(),userRequest.getEmail());
         userRepository.save(user);
         return UserResponse.from(user);
 
     }
-
     //삭제
     @Transactional
-    public void deleteUserById(final Long userId,final UserDeleteSchedule userDeleteRequest) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("그런 아이디 없습니다.")
+    public void deleteUserById(HttpSession session,final UserDeleteSchedule userDeleteRequest) {
+        Long loginUserId  = (Long) session.getAttribute("LOGIN_DIRECTOR");
+        User user = userRepository.findById(loginUserId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        String Password = userDeleteRequest.getPassword();
-        if (!user.checkPassword(Password)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
+
         userRepository.delete(user);
     }
 }

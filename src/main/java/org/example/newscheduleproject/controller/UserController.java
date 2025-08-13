@@ -2,6 +2,8 @@ package org.example.newscheduleproject.controller;
 
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.dto.Request.UserDeleteSchedule;
@@ -29,20 +31,20 @@ public class UserController {
     // 수정
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponse> updateSchedule(
-            @PathVariable Long userId,
+            HttpSession session,
             @RequestBody @Valid UserRequest userRequest
     ) {
         return ResponseEntity
-                .ok(userService.Update(userId, userRequest));
+                .ok(userService.Update(session, userRequest));
     }
 
     // 삭제
     @DeleteMapping("/{userId}")
     public void  deleteSchedule(
-            @PathVariable Long userId,
+            HttpSession session,
             @RequestBody @Valid UserDeleteSchedule userDeleteScheduleRequest
     ) {
-        userService.deleteUserById(userId, userDeleteScheduleRequest);
+        userService.deleteUserById(session, userDeleteScheduleRequest);
 
     }
 

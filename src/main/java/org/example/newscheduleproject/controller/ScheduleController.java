@@ -1,63 +1,56 @@
+
 package org.example.newscheduleproject.controller;
 
-
-import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.dto.Request.ScheduleRequest;
 import org.example.newscheduleproject.dto.Response.ScheduleResponse;
 import org.example.newscheduleproject.service.ScheduleService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users/{userId}/schedules")
 public class ScheduleController {
+
     private final ScheduleService scheduleService;
 
-    //생성
     @PostMapping
-    public ResponseEntity<ScheduleResponse> save(
+    public ScheduleResponse createSchedule(
             @PathVariable Long userId,
-            @RequestBody @Valid ScheduleRequest scheduleRequest
+            @RequestBody ScheduleRequest request,
+            HttpSession session
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveSchedule(scheduleRequest,userId));
+        // 세션 사용자 vs URL userId 검증은 서비스에서 처리
+        return scheduleService.saveSchedule(session, request);
     }
 
-    //전체 조회
     @GetMapping
-    public ResponseEntity<List<ScheduleResponse>> getAll(
-            @PathVariable Long userId
-    ){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getFindAll(userId));
+    public List<ScheduleResponse> getSchedules(
+            @PathVariable Long userId,
+            HttpSession session
+    ) {
+        return scheduleService.getSchedules(session, userId);
     }
-    //단건 수정
+
     @PutMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponse> update(
+    public ScheduleResponse updateSchedule(
             @PathVariable Long userId,
             @PathVariable Long scheduleId,
-            @RequestBody ScheduleRequest scheduleRequest
-    ){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.updateSchedule(userId,scheduleId,scheduleRequest));
+            @RequestBody ScheduleRequest request,
+            HttpSession session
+    ) {
+        return scheduleService.updateSchedule(session, scheduleId, request);
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> delete(
+    public void deleteSchedule(
             @PathVariable Long userId,
-            @PathVariable Long scheduleId
+            @PathVariable Long scheduleId,
+            HttpSession session
     ) {
-        scheduleService.deleteSchedule(userId,scheduleId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        scheduleService.deleteSchedule(session, scheduleId);
     }
-
-
-
 }
-
-
-
-
