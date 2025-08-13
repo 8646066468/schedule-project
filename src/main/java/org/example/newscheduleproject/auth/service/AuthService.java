@@ -1,6 +1,7 @@
 package org.example.newscheduleproject.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.newscheduleproject.auth.dto.AuthLoginRequest;
 import org.example.newscheduleproject.auth.dto.AuthRequest;
 import org.example.newscheduleproject.auth.dto.AuthResponse;
 import org.example.newscheduleproject.entity.User;
@@ -14,13 +15,19 @@ public class AuthService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void signup(AuthRequest request) {
-        User user = new User(request.getName(), request.getEmail(), request.getPassword());
+    public AuthResponse signup(AuthRequest request) {
+        // 이메일 중복 체크
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
+        User user = new User(request.getName(),request.getEmail(), request.getPassword());
         userRepository.save(user);
+        return new AuthResponse(user.getId());
     }
+
     @Transactional
-    public AuthResponse login(AuthRequest authRequest) {
-        User user = userRepository.findByName(authRequest.getName())
+    public AuthResponse login(AuthLoginRequest authRequest) {
+        User user = userRepository.findByEmail(authRequest.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("아이디가 일치하지 않습니다."));
 
         // 비밀번호 검증

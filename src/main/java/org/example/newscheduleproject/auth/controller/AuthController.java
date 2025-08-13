@@ -3,6 +3,7 @@ package org.example.newscheduleproject.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.newscheduleproject.auth.dto.AuthLoginRequest;
 import org.example.newscheduleproject.auth.dto.AuthRequest;
 import org.example.newscheduleproject.auth.dto.AuthResponse;
 import org.example.newscheduleproject.auth.service.AuthService;
@@ -19,21 +20,21 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody AuthRequest request) {
-        authService.signup(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다");
+    public ResponseEntity<AuthResponse> signup(@RequestBody AuthRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.signup(request));
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthLoginRequest authloginRequest, HttpServletRequest request) {
         try {
-            AuthResponse result = authService.login(authRequest);
+            AuthResponse result = authService.login(authloginRequest);
             HttpSession session = request.getSession();
             session.setAttribute("LOGIN_DIRECTOR", result.getId());
-            return ResponseEntity.ok("로그인에 성공했습니다.");
+            return ResponseEntity.ok(result);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 

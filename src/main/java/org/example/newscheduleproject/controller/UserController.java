@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.dto.Request.UserRequest;
 import org.example.newscheduleproject.dto.Response.UserResponse;
 import org.example.newscheduleproject.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

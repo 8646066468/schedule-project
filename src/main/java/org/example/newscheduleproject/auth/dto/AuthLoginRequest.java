@@ -1,11 +1,9 @@
 package org.example.newscheduleproject.auth.dto;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 
 @Getter
-public class AuthRequest {
-    private String name;
+public class AuthLoginRequest {
     private String email;
     private String password;
 }

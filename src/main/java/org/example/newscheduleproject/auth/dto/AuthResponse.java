@@ -6,7 +6,9 @@ import lombok.Getter;
 public class AuthResponse {
     private final Long  id;
 
+
     public AuthResponse(Long id) {
         this.id = id;
+
     }
 }
