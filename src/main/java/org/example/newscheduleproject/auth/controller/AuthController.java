@@ -3,7 +3,6 @@ package org.example.newscheduleproject.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.newscheduleproject.auth.dto.AuthLoginRequest;
 import org.example.newscheduleproject.auth.dto.AuthRequest;
@@ -36,6 +35,7 @@ public class AuthController {
             AuthResponse result = authService.login(authloginRequest);
             HttpSession session = request.getSession();
             session.setAttribute("LOGIN_DIRECTOR", result.getId());
+            authService.login(authloginRequest);
             return ResponseEntity.ok(result);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

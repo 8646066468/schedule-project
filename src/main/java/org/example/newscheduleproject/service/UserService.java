@@ -27,13 +27,13 @@ public class UserService {
         return userResponseList;
     }
     @Transactional
-    public UserResponse Uqdate(Long userId, UserRequest userRequest) {
+    public UserResponse Update(final Long userId,final UserRequest userRequest) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("그런 일정이 없는데?")
         );
         if (!userRequest.getPassword().equals(user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않다");
-        }
+        }// t  userentity에 비밀번호 알고리즘을 넣어보자
 
         user.update(userRequest.getName(),userRequest.getEmail());
         userRepository.save(user);
@@ -42,7 +42,7 @@ public class UserService {
     }
     //삭제
     @Transactional
-    public void deleteUserById(Long userId, UserDeleteSchedule userDeleteScheduleRequest) {
+    public void deleteUserById(final Long userId,final UserDeleteSchedule userDeleteScheduleRequest) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("그런 아이디 없는데요?")
         );

@@ -33,7 +33,7 @@ public class UserController {
             @RequestBody @Valid UserRequest userRequest
     ) {
         return ResponseEntity
-                .ok(userService.Uqdate(userId, userRequest));
+                .ok(userService.Update(userId, userRequest));
     }
 
     // 삭제
